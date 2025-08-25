@@ -114,9 +114,9 @@ class MultiLatentAttention(Attention):
             attn_mask_type=self.attn_mask_type,
             attention_type=self.attention_type,
             softmax_scale=self.softmax_scale,
-            k_channels=self.q_head_dim,
-            v_channels=self.config.v_head_dim,
-            cp_comm_type=cp_comm_type,
+            # k_channels=self.q_head_dim,
+            # v_channels=self.config.v_head_dim,
+            # cp_comm_type=cp_comm_type,
         )
 
         # Output.

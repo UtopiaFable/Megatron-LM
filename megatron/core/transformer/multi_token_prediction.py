@@ -60,6 +60,8 @@ except ImportError:
     warnings.warn('Apex is not installed. Falling back to Torch Norm')
     LNImpl = WrappedTorchNorm
 
+from megatron.core.transformer.torch_norm import WrappedTorchNorm
+LNImpl = WrappedTorchNorm
 
 def tie_word_embeddings_state_dict(
     sharded_state_dict: ShardedStateDict, word_emb_weight: Tensor, word_emb_weight_key: str
