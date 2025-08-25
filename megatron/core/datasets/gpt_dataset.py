@@ -112,6 +112,11 @@ class GPTDataset(MegatronDataset):
         (self.document_index, self.sample_index, self.shuffle_index) = (
             self._build_document_sample_shuffle_indices()
         )
+        log_single_rank(
+            logger,
+            logging.INFO,
+            f"hash: {self.unique_description_hash}",
+        )
 
     @staticmethod
     def numel_low_level_dataset(low_level_dataset: IndexedDataset) -> int:

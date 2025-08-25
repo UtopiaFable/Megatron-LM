@@ -56,14 +56,14 @@ try:
     from megatron.core.fusions.fused_layer_norm import FusedLayerNorm
 
     HAVE_APEX = True
-    LNImpl = FusedLayerNorm
+    LNImpl = TENorm
 except ImportError:
     import warnings
 
     from megatron.core.transformer.torch_norm import WrappedTorchNorm
 
     warnings.warn('Apex is not installed. Falling back to Torch Norm')
-    LNImpl = WrappedTorchNorm
+    LNImpl = TENorm
 
 
 def get_gpt_layer_with_transformer_engine_spec(

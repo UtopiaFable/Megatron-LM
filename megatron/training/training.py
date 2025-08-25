@@ -2396,7 +2396,8 @@ def build_train_valid_test_data_loaders(
     torch.distributed.broadcast(flags, 0)
 
     args.do_train = getattr(args, "do_train", False) or flags[0].item()
-    args.do_valid = getattr(args, "do_valid", False) or flags[1].item()
+    # args.do_valid = getattr(args, "do_valid", False) or flags[1].item()
+    args.do_valid = False
     args.do_test = getattr(args, "do_test", False) or flags[2].item()
 
     return train_dataloader, valid_dataloader, test_dataloader
