@@ -7,22 +7,22 @@ import torch
 from torch.optim import SGD as CPUSGD
 from torch.optim import AdamW as CPUAdam
 
-try:
-    from transformer_engine.pytorch.optimizers import FusedAdam as Adam
-    from transformer_engine.pytorch.optimizers import FusedSGD as SGD
-except ImportError:
-    try:
-        from apex.optimizers import FusedAdam as Adam
-        from apex.optimizers import FusedSGD as SGD
-    except ImportError:
-        warnings.warn(
-            f'Transformer Engine and Apex are not installed. Falling back to Torch optimizers.'
-        )
-
-        # Apex's FusedAdam is a drop-in replacement for torch's AdamW.
-        # pylint: disable-next=line-too-long.
-        # See https://github.com/NVIDIA/apex/blob/7b73b12361068a10b0f44844534613f252a5ea75/apex/optimizers/fused_adam.py#L16.
-        from torch.optim import AdamW as Adam, SGD
+# try:
+#     from transformer_engine.pytorch.optimizers import FusedAdam as Adam
+#     from transformer_engine.pytorch.optimizers import FusedSGD as SGD
+# except ImportError:
+#     try:
+#         from apex.optimizers import FusedAdam as Adam
+#         from apex.optimizers import FusedSGD as SGD
+#     except ImportError:
+#         warnings.warn(
+#             f'Transformer Engine and Apex are not installed. Falling back to Torch optimizers.'
+#         )
+#
+#         # Apex's FusedAdam is a drop-in replacement for torch's AdamW.
+#         # pylint: disable-next=line-too-long.
+#         # See https://github.com/NVIDIA/apex/blob/7b73b12361068a10b0f44844534613f252a5ea75/apex/optimizers/fused_adam.py#L16.
+from torch.optim import AdamW as Adam, SGD
 
 from megatron.core import mpu
 from megatron.core.optimizer.cpu_offloading.hybrid_optimizer import HybridDeviceOptimizer

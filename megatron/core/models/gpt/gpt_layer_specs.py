@@ -48,8 +48,6 @@ try:
 except ImportError:
     HAVE_TE = False
 
-from megatron.core.transformer.torch_norm import WrappedTorchNorm
-
 try:
     import apex  # pylint: disable=unused-import
 
@@ -63,7 +61,9 @@ except ImportError:
     from megatron.core.transformer.torch_norm import WrappedTorchNorm
 
     warnings.warn('Apex is not installed. Falling back to Torch Norm')
-    LNImpl = TENorm
+    LNImpl = WrappedTorchNorm
+
+from megatron.core.transformer.torch_norm import WrappedTorchNorm
 
 
 def get_gpt_layer_with_transformer_engine_spec(
@@ -199,7 +199,7 @@ def get_gpt_layer_local_spec(
     # Adjust for RMS norm.
     if normalization == "RMSNorm":
         global LNImpl
-        LNImpl = WrappedTorchNorm
+        LNImpl = TENorm
 
     if fp8 is not None:
         warnings.warn(

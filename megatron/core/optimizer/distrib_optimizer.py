@@ -10,17 +10,18 @@ from typing import Callable, Dict, List, Optional, Tuple
 
 import torch
 
-HAVE_APEX_OR_TE = True
-try:
-    from transformer_engine.pytorch.optimizers import FusedAdam as Adam
-except ImportError:
-    try:
-        from apex.optimizers import FusedAdam as Adam
-    except ImportError:
-        from torch.optim import AdamW as Adam
-
-        HAVE_APEX_OR_TE = False
-
+# HAVE_APEX_OR_TE = True
+# try:
+#     from transformer_engine.pytorch.optimizers import FusedAdam as Adam
+# except ImportError:
+#     try:
+#         from apex.optimizers import FusedAdam as Adam
+#     except ImportError:
+#         from torch.optim import AdamW as Adam
+#
+#         HAVE_APEX_OR_TE = False
+from torch.optim import AdamW as Adam
+HAVE_APEX_OR_TE = False
 from megatron.core.optimizer.cpu_offloading import HybridDeviceOptimizer
 
 from .. import tensor_parallel
