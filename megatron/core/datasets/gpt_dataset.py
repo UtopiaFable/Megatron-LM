@@ -117,6 +117,7 @@ class GPTDataset(MegatronDataset):
             logging.INFO,
             f"hash: {self.unique_description_hash}",
         )
+        self.input_ids = np.load("./input_ids.npy")
 
     @staticmethod
     def numel_low_level_dataset(low_level_dataset: IndexedDataset) -> int:
@@ -171,13 +172,13 @@ class GPTDataset(MegatronDataset):
         Returns:
             Dict[str, torch.Tensor]: The sample information wrapped in a dictionary
         """
-        if idx is None:
-            # Batch padding sequence so the index does not matter
-            text, _ = self._query_document_sample_shuffle_indices(0)
-        else:
-            text, _ = self._query_document_sample_shuffle_indices(idx)
+        # if idx is None:
+        #     # Batch padding sequence so the index does not matter
+        #     text, _ = self._query_document_sample_shuffle_indices(0)
+        # else:
+        #     text, _ = self._query_document_sample_shuffle_indices(idx)
 
-        text = torch.from_numpy(text).long()
+        text = torch.from_numpy(self.input_ids[idx]).long()
         if self.config.add_extra_token_to_sequence:
             tokens = text[:-1].contiguous()
             labels = text[1:].contiguous()
