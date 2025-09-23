@@ -40,6 +40,8 @@ def get_moe_module_spec(
 
     # experts spec
     if moe_grouped_gemm:
+        use_te = True
+        moe_use_legacy_grouped_gemm = False
         ## use GroupedMLP
         if use_te and TEColumnParallelGroupedLinear is not None and not moe_use_legacy_grouped_gemm:
             ## use TEGroupedLinear
