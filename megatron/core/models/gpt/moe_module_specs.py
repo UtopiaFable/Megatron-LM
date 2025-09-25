@@ -25,6 +25,8 @@ def get_moe_module_spec(
     moe_use_legacy_grouped_gemm: Optional[bool] = False,
 ) -> ModuleSpec:
     """Helper function to get module spec for MoE"""
+    use_te = True
+    moe_use_legacy_grouped_gemm = False
     if use_te is not None and use_te:
         backend: BackendSpecProvider = TESpecProvider()
     else:
