@@ -80,10 +80,8 @@ class MultiLatentAttention(Attention):
         )
         self.qkv_up_checkpoint = None
 
-        mscale = _yarn_get_mscale(self.config.rotary_scaling_factor, self.config.mscale)
-        self.softmax_scale = mscale * mscale / math.sqrt(self.q_head_dim)
-
         if self.config.rope_type == "rope":
+            self.softmax_scale = None
             self.rotary_pos_emb = RotaryEmbedding(
                 self.config.qk_pos_emb_head_dim,
                 rotary_percent=self.config.rotary_percent,
@@ -91,6 +89,8 @@ class MultiLatentAttention(Attention):
             )
         elif self.config.rope_type == "yarn":
             assert not self.config.apply_rope_fusion, "MLA Yarn RoPE does not support RoPE fusion"
+            mscale = _yarn_get_mscale(self.config.rotary_scaling_factor, self.config.mscale)
+            self.softmax_scale = mscale * mscale / math.sqrt(self.q_head_dim)
             self.rotary_pos_emb = YarnRotaryEmbedding(
                 self.config.qk_pos_emb_head_dim,
                 rotary_base=self.config.rotary_base,

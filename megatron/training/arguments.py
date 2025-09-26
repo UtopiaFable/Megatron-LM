@@ -1051,7 +1051,7 @@ def core_transformer_config_from_args(args, config_class=None):
         kw_args['cp_comm_type'] = args.cp_comm_type[0]
     if args.is_hybrid_model:
         kw_args['is_hybrid_model'] = args.is_hybrid_model
-
+    kw_args['rope_type'] = "rope"
     # Return config.
     return config_class(**kw_args)
 
