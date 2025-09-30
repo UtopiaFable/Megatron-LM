@@ -26,6 +26,7 @@ from megatron.core.transformer.multi_token_prediction import (
 from megatron.core.transformer.spec_utils import ModuleSpec
 from megatron.core.transformer.transformer_block import TransformerBlock
 from megatron.core.transformer.transformer_config import TransformerConfig
+from megatron.core.transformer.utils import get_default_causal_mask
 from megatron.core.utils import WrappedTensor, deprecate_inference_params
 
 
@@ -330,6 +331,7 @@ class GPTModel(LanguageModule):
         ):
             decoder_input = WrappedTensor(decoder_input)
 
+        attention_mask = self._preprocess_masks(decoder_input, attention_mask)
         # Run decoder.
         hidden_states = self.decoder(
             hidden_states=decoder_input,
@@ -409,6 +411,25 @@ class GPTModel(LanguageModule):
         loss = self.compute_language_model_loss(labels, logits)
 
         return loss
+
+    def _preprocess_masks(self, x, attention_mask: Tensor = None):
+        """Preprocess input_ids and generate labels and masks if they are None.
+
+        Args:
+            labels (Tensor): Labels.
+            attention_mask (Tensor): Attention mask.
+
+        Returns:
+            tokens (Tensor): Processed tokens if in training.
+            labels (Tensor): Labels if input is none.
+            attention_mask (Tensor): Attention mask if input is none.
+            loss_mask (Tensor): Loss mask.
+        """
+        if attention_mask is None:
+            attention_mask = get_default_causal_mask(x.shape[1])
+        else:
+            attention_mask = attention_mask.to(torch.bool)
+        return attention_mask
 
     def shared_embedding_or_output_weight(self) -> Tensor:
         """Gets the embedding weight or output logit weights when share input embedding and
